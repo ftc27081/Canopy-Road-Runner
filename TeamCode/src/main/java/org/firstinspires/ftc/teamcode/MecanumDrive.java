@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
@@ -32,6 +34,7 @@ import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -52,7 +55,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Config
+@Autonomous(name = "AutonTest", group = "Autonomous")
 public final class MecanumDrive {
+
+    
     public static class Params {
         // IMU orientation
         // TODO: fill in these values based on
@@ -498,4 +504,7 @@ public final class MecanumDrive {
                 defaultVelConstraint, defaultAccelConstraint
         );
     }
+
+
+
 }

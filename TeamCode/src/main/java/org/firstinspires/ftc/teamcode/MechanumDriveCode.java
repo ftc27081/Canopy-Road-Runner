@@ -5,13 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
 @TeleOp(name="Mechanum DriveCode")
 public class MechanumDriveCode extends LinearOpMode {
 
     private DcMotorEx flMotor, frMotor, blMotor, brMotor;
-
+    private Servo FlowerTake1, FlowerTake2;
     public void drive() {
         //get joystick values
         double yPower = 0.7 * gamepad1.left_stick_y;   // forward and back
@@ -35,13 +36,25 @@ public class MechanumDriveCode extends LinearOpMode {
         blMotor.setPower(blPower);
         brMotor.setPower(brPower);
     }
+    public void FlowerTake() {
 
+
+        boolean flowerTake1Power = gamepad2.leftBumperWasPressed();
+        boolean flowerTake2Power = gamepad2.rightBumperWasPressed();
+        while (flowerTake1Power) {
+            FlowerTake1.setDirection(Servo.Direction.FORWARD);
+        }
+            FlowerTake2.setDirection(Servo.Direction.REVERSE);
+    }
     public void initialization() {
         // Initialization
         flMotor = hardwareMap.get(DcMotorEx.class, "flMotor");
         frMotor = hardwareMap.get(DcMotorEx.class, "frMotor");
         blMotor = hardwareMap.get(DcMotorEx.class, "blMotor");
         brMotor = hardwareMap.get(DcMotorEx.class, "brMotor");
+        FlowerTake1 = hardwareMap.get(Servo.class, "flowerTake1" );
+        FlowerTake2 = hardwareMap.get(Servo.class, "flowerTake2");
+        FlowerTake1
 
 
         frMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -66,6 +79,7 @@ public class MechanumDriveCode extends LinearOpMode {
 
         while (opModeIsActive()) {
             this.drive();
+            this.FlowerTake();
         }
     }
 }

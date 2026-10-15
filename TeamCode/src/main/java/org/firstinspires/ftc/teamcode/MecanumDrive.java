@@ -55,7 +55,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Config
-@Autonomous(name = "AutonTest", group = "Autonomous")
 public final class MecanumDrive {
 
     

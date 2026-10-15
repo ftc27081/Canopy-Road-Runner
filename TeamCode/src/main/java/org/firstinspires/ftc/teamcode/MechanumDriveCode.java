@@ -89,7 +89,7 @@ public class MechanumDriveCode extends LinearOpMode {
     public void gateControl(){
 
         if (gamepad2.right_bumper){
-            gate.setPower(0.2);
+            gate.setPower(1);
 
         }
         if (gamepad2.left_bumper){

@@ -42,21 +42,17 @@ public class MechanumDriveCode extends LinearOpMode {
     }
 
 
-    public void intake() {
+    public void flowerIntake() {
         // If 'A' is held, run the servos. Otherwise, stop them.
-        if (gamepad1.a) {
+        while (gamepad1.left_trigger>0){
+            leftServo.setPower((-1));
             rightServo.setPower(-1);
-            leftServo.setPower(-1);
         }
-
-
-        if (gamepad1.b){
+        while (gamepad1.right_trigger>0){
             leftServo.setPower(1);
             rightServo.setPower(1);
         }
-
-        if (gamepad1.x){
-
+        if (gamepad1.left_trigger==0 && gamepad1.right_trigger==0){
             leftServo.setPower(0);
             rightServo.setPower(0);
         }
@@ -64,7 +60,7 @@ public class MechanumDriveCode extends LinearOpMode {
 
 
 
-    public void wheelVelocity() {
+    public void outTake() {
         if (gamepad2.a){
             outakeMotor.setPower(0.45);
 
@@ -84,18 +80,16 @@ public class MechanumDriveCode extends LinearOpMode {
 
 
     }
-    public void gateControl(){
-
-        if (gamepad2.right_bumper){
+    public void outtakeFeeder(){
+        while (gamepad2.left_bumper){
             gate.setPower(-0.5);
-
         }
-        if (gamepad2.left_bumper){
+        if (!gamepad2.left_bumper){
             gate.setPower(0);
         }
     }
 
-    public void frontWheels(){
+    public void intake(){
 
         if (gamepad2.dpad_down){
             frontMotor.setPower(0.5);
@@ -146,11 +140,10 @@ public class MechanumDriveCode extends LinearOpMode {
 
         while (opModeIsActive()) {
             this.drive();
-            this.wheelVelocity();
-            this.frontWheels();
+            this.outTake();
+            this.flowerIntake();
             this.intake();
-            this.gateControl();
-
+            this.outtakeFeeder();
 
 
         }

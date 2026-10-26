@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
@@ -14,9 +15,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class MechanumDriveCode extends LinearOpMode {
 
     private DcMotorEx flMotor, frMotor, blMotor, brMotor, outakeMotor,frontMotor;
-    private CRServo gate,rightServo,leftServo;
+    private CRServo rightServo,leftServo;
 
-
+    private Servo outtakeServo;
     public void drive() {
         //get joystick values
         double yPower = 0.7 * gamepad1.left_stick_y;   // forward and back
@@ -61,46 +62,42 @@ public class MechanumDriveCode extends LinearOpMode {
 
 
     public void outTake() {
-        if (gamepad2.a){
-            outakeMotor.setPower(0.45);
-
-
-        }
+        double outakePower;
+        double servoAngle;
+        servoAngle = 0.4;
         if (gamepad2.b){
-
-            outakeMotor.setPower(0.6);
-
-        }
+            outakePower = 0.6;
+            outakeMotor.setPower(outakePower);
         if (gamepad2.x){
+            outakePower = 0;
+            outakeMotor.setPower(outakePower);
+        }
+        }
+        if (gamepad2.a){
+            if (servoAngle==0.4) {
+                servoAngle = 0.6;
+                outtakeServo.setPosition(servoAngle);
 
-            outakeMotor.setPower(-0.2);
-            sleep(1000);
-            outakeMotor.setPower(0);
+            }
+            else{
+                servoAngle = 0.4;
+                outtakeServo.setPosition(servoAngle);
+            }
         }
 
 
-    }
-    public void outtakeFeeder(){
-        while (gamepad2.left_bumper){
-            gate.setPower(-0.5);
-        }
-        if (!gamepad2.left_bumper){
-            gate.setPower(0);
-        }
     }
 
     public void intake(){
 
-        if (gamepad2.dpad_down){
+        while (gamepad2.right_bumper){
             frontMotor.setPower(0.5);
 
         }
-        if (gamepad2.dpad_up){
-            frontMotor.setPower(0);
-        }
-        if (gamepad2.dpad_left){
+        while (gamepad2.left_bumper){
             frontMotor.setPower(-0.5);
         }
+        frontMotor.setPower(0);
     }
     public void initialization() {
         // Initialization
@@ -111,9 +108,9 @@ public class MechanumDriveCode extends LinearOpMode {
         brMotor = hardwareMap.get(DcMotorEx.class, "brMotor");
         outakeMotor = hardwareMap.get(DcMotorEx.class, "outakeMotor");
         frontMotor = hardwareMap.get(DcMotorEx.class,"frontMotor");
-        gate = hardwareMap.get(CRServo.class,"Gate");
         rightServo = hardwareMap.get(CRServo.class,"rightServo");
         leftServo = hardwareMap.get(CRServo.class,"leftServo");
+        outtakeServo = hardwareMap.get(Servo.class, "outtakeServo");
 
         frMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         brMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -143,7 +140,6 @@ public class MechanumDriveCode extends LinearOpMode {
             this.outTake();
             this.flowerIntake();
             this.intake();
-            this.outtakeFeeder();
 
 
         }

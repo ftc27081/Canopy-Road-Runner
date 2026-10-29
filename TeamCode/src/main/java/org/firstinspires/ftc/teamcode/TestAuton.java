@@ -13,16 +13,19 @@ public class TestAuton extends LinearOpMode {
     @Override
     public void runOpMode() {
         // 1. Define the robot's starting position and orientation (X, Y, Heading)
-        Pose2d initialPose = new Pose2d(63, 63, Math.toRadians(270));
+        Pose2d initialPose = new Pose2d(-63, -63, Math.toRadians(270));
 
         // 2. Initialize MecanumDrive with the hardware map and starting pose
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         // 3. Build your path using the Action Builder
         Action mainTrajectory = drive.actionBuilder(initialPose)
-                .lineToY(50) // Drives straight to Y = 30
+                .lineToY(53) // Drives straight to Y = 30
                 .turn(Math.toRadians(-90)) // Turns 90 degrees
-                .lineToX(50)
+                .turn(90)
+                .lineToX(59)
+                .splineTo(new Vector2d(-63,48),Math.PI/2)
+
               //  .splineTo(new Vector2d(40, 30), Math.toRadians(0)) // Smooth curve to coordinates
                 .build();
 

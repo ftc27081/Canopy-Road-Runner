@@ -27,14 +27,12 @@ public class MeepMeepTesting {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(64, 0, 0))
-                .lineToX(10)
-                .turn(Math.toRadians(90))
-                .lineToY(30)
-                .turn(Math.toRadians(90))
+
                 .waitSeconds(10)
-                .turn(Math.toRadians(90))
+                .lineToX(5)
+                .lineToY(5)
                 .lineToY(0)
-                .turn(Math.toRadians(90))
+                .lineToX(8)
                 .build());
 
               meepMeep.setDarkMode(true)

@@ -18,6 +18,19 @@ public class MechanumDriveCode extends LinearOpMode {
     private CRServo rightServo,leftServo;
 
     private Servo outtakeServo;
+
+    private double targetVelocity = 0.0;
+    private final double FLYWHEEL_TARGET_RPM_TICKS = 1800.0;
+
+    // PIDF Coefficients (tune these)
+    private double kP = 0.005;
+    private double kI = 0.000;
+    private double kD = 0.0001;
+    private double kF = 0.00055; // Approx 1.0 / maxTicksPerSec
+
+    private double lastError = 0.0;
+    private double integralSum = 0.0;
+    private long lastTimeNanos = 0;
     public void drive() {
         //get joystick values
         double yPower = 0.7 * gamepad1.left_stick_y;   // forward and back
@@ -61,32 +74,7 @@ public class MechanumDriveCode extends LinearOpMode {
 
 
 
-    public void outTake() {
-        double outakePower;
-        double servoAngle;
-        servoAngle = 0.4;
-        if (gamepad2.b){
-            outakePower = 0.6;
-            outakeMotor.setPower(outakePower);
-        if (gamepad2.x){
-            outakePower = 0;
-            outakeMotor.setPower(outakePower);
-        }
-        }
-        if (gamepad2.a){
-            if (servoAngle==0.4) {
-                servoAngle = 0.6;
-                outtakeServo.setPosition(servoAngle);
 
-            }
-            else{
-                servoAngle = 0.4;
-                outtakeServo.setPosition(servoAngle);
-            }
-        }
-
-
-    }
 
     public void intake(){
 
@@ -98,6 +86,53 @@ public class MechanumDriveCode extends LinearOpMode {
             frontMotor.setPower(-0.5);
         }
         frontMotor.setPower(0);
+    }
+
+    public void wheelvolocity () {
+        // 1. Handle Gamepad 2 Controls
+        if (gamepad2.a) {
+            targetVelocity = FLYWHEEL_TARGET_RPM_TICKS;
+        } else if (gamepad2.x) {
+            targetVelocity = 0.0;
+        }
+
+        // 2. Shut off power immediately if shooter is toggled off
+        if (targetVelocity == 0.0) {
+            outakeMotor.setPower(0.0);
+            lastError = 0.0;
+            integralSum = 0.0;
+            return;
+        }
+
+        // 3. Compute elapsed time (dt)
+        long currentTimeNanos = System.nanoTime();
+        if (lastTimeNanos == 0) {
+            lastTimeNanos = currentTimeNanos;
+            return;
+        }
+        double dt = (currentTimeNanos - lastTimeNanos) / 1e9;
+        lastTimeNanos = currentTimeNanos;
+
+        if (dt <= 0.0) return;
+
+        // 4. Calculate error & PIDF terms
+        double currentVelocity = outakeMotor.getVelocity();
+        double error = targetVelocity - currentVelocity;
+
+        integralSum += error * dt;
+        double derivative = (error - lastError) / dt;
+        lastError = error;
+
+        double pTerm = kP * error;
+        double iTerm = kI * integralSum;
+        double dTerm = kD * derivative;
+        double fTerm = kF * targetVelocity;
+
+        double power = pTerm + iTerm + dTerm + fTerm;
+
+        // Clamp motor output between -1.0 and 1.0
+        power = Math.max(-1.0, Math.min(1.0, power));
+        outakeMotor.setPower(power);
     }
     public void initialization() {
         // Initialization
@@ -137,9 +172,9 @@ public class MechanumDriveCode extends LinearOpMode {
 
         while (opModeIsActive()) {
             this.drive();
-            this.outTake();
             this.flowerIntake();
             this.intake();
+            this.wheelvolocity();
 
 
         }

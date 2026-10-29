@@ -202,7 +202,7 @@ public final class TuningOpModes {
                         md.voltageSensor,
                         () -> new MotorFeedforward(MecanumDrive.PARAMS.kS,
                                 MecanumDrive.PARAMS.kV / MecanumDrive.PARAMS.inPerTick,
-                                MecanumDrive.PARAMS.kA / MecanumDrive.PARAMS.inPerTick),
+                                MecanumDrive.PARAMS.kS / MecanumDrive.PARAMS.inPerTick),
                         0
                 );
             };

@@ -135,7 +135,7 @@ public class Bot1code extends LinearOpMode {
         outakeMotor = hardwareMap.get(DcMotorEx.class, "outakeMotor");
         frontMotor = hardwareMap.get(DcMotorEx.class,"frontMotor");
         frontServo = hardwareMap.get(CRServo.class,"frontServo");
-        gateServo = hardwareMap.get(Servo.class,"frontServo");
+        gateServo = hardwareMap.get(Servo.class,"gateServo");
 
 
 

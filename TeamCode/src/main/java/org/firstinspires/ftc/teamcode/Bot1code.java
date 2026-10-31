@@ -14,11 +14,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name="Bot 1 code")
 public class Bot1code extends LinearOpMode {
 
-    private DcMotorEx flMotor, frMotor, blMotor, brMotor, outakeMotor,frontMotor;
-    private CRServo frontServo;
+    private DcMotorEx flMotor, frMotor, blMotor, brMotor, outakeMotor,intakeMotor;
+    private CRServo intakeFeeder;
     private Servo gateServo;
-
-
 
     public void drive() {
         //get joystick values
@@ -43,87 +41,51 @@ public class Bot1code extends LinearOpMode {
         blMotor.setPower(blPower);
         brMotor.setPower(brPower);
     }
-
-
-
-
-
-
-
-
     public void intake(){
-
-        while (gamepad2.right_bumper){
-            frontMotor.setPower(0.5);
-
+        if (gamepad2.right_bumper){
+            intakeMotor.setPower(1);
         }
-
-        while (gamepad2.left_bumper){
-            frontMotor.setPower(-0.5);
+        if (gamepad2.left_bumper){
+            intakeMotor.setPower(-1);
         }
-
-
-        frontMotor.setPower(0);
+        if (gamepad2.y) {
+            intakeMotor.setPower(0);
+        }
     }
-
-
     public void outtake(){
-
         if (gamepad2.a){
-
             outakeMotor.setPower(0.5);
         }
-
         if (gamepad2.b){
             outakeMotor.setPower(0.6);
-
         }
-
         if (gamepad2.x){
             outakeMotor.setPower(-0.3);
             sleep(500);
             outakeMotor.setPower(0);
         }
-
-
-
     }
 
-    public void frontServo(){
-
-       if (gamepad1.a){
-           frontServo.setPower(0.6);
-
+    public void intakeFeeder(){
+       if (gamepad2.right_trigger>0){
+           intakeFeeder.setPower(0.6);
         }
-
-       if (gamepad1.b){
-           frontServo.setPower(-0.6);
-
+       if (gamepad2.left_trigger>0){
+           intakeFeeder.setPower(-0.6);
        }
-       if (gamepad1.x){
-
-           frontServo.setPower(0);
+       if (gamepad2.right_stick_button){
+           intakeFeeder.setPower(0);
        }
-
     }
-
 
     public void gatecontrol(){
-
         if (gamepad2.dpad_up){
-            gateServo.setPosition(90);
-
+            gateServo.setPosition(1);
         }
-
         if (gamepad2.dpad_down){
-
             gateServo.setPosition(0);
         }
-
     }
-
-
-
 
     public void initialization() {
         // Initialization
@@ -133,11 +95,9 @@ public class Bot1code extends LinearOpMode {
         blMotor = hardwareMap.get(DcMotorEx.class, "blMotor");
         brMotor = hardwareMap.get(DcMotorEx.class, "brMotor");
         outakeMotor = hardwareMap.get(DcMotorEx.class, "outakeMotor");
-        frontMotor = hardwareMap.get(DcMotorEx.class,"frontMotor");
-        frontServo = hardwareMap.get(CRServo.class,"frontServo");
+        intakeMotor = hardwareMap.get(DcMotorEx.class,"frontMotor");
+        intakeFeeder = hardwareMap.get(CRServo.class,"frontServo");
         gateServo = hardwareMap.get(Servo.class,"gateServo");
-
-
 
         frMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         brMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -146,9 +106,6 @@ public class Bot1code extends LinearOpMode {
         frMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         blMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         brMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-
-
     }
 
 
@@ -167,10 +124,7 @@ public class Bot1code extends LinearOpMode {
             this.intake();
             this.outtake();
             this.gatecontrol();
-            this.frontServo();
-
-
-
+            this.intakeFeeder();
         }
     }
 }

@@ -6,9 +6,12 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 
 @Autonomous(name = "Test Auton", group = "Autonomous")
 public class TestAuton extends LinearOpMode {
+    private DcMotorEx outtakeMotor,IntakeMotor;
 
     @Override
     public void runOpMode() {
@@ -38,5 +41,18 @@ public class TestAuton extends LinearOpMode {
 
         // 5. Execute the trajectory blockingly
         Actions.runBlocking(mainTrajectory);
+    }
+
+    public void initialization (){
+
+
+    }
+
+
+
+    public void shoot(){
+
+
+
     }
 }

@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class MechanumDriveCode extends LinearOpMode {
 
     private DcMotorEx flMotor, frMotor, blMotor, brMotor, outakeMotor,frontMotor;
-    private Servo outtakeServo;
+    private Servo outtakeServo,gateServo;
     public void drive() {
         //get joystick values
         double yPower = 0.7 * -gamepad1.left_stick_y;   // forward and back
@@ -52,19 +52,32 @@ public class MechanumDriveCode extends LinearOpMode {
     }
     public void outTake() {
         if (gamepad2.b) {
-            outtakeServo.setPosition(0.3);
+            outtakeServo.setPosition(0.);
             outakeMotor.setPower(-0.525);
         }
         if (gamepad2.a){
-            outtakeServo.setPosition(0.5);
+            outtakeServo.setPosition(0.75);
             outakeMotor.setPower(-0.56);
         }
         if (gamepad2.x){
-            outakeMotor.setPower(0.2);
+            outakeMotor.setPower(0.1);
             sleep(500);
             outakeMotor.setPower(0);
         }
     }
+
+    public void gateControl(){
+
+        if (gamepad2.dpad_up){
+            gateServo.setPosition(0);
+        }
+
+        if (gamepad2.dpad_down){
+            gateServo.setPosition(0.5);
+        }
+    }
+
+
 
     public void initialization() {
         // Initialization
@@ -76,6 +89,7 @@ public class MechanumDriveCode extends LinearOpMode {
         outakeMotor = hardwareMap.get(DcMotorEx.class, "outakeMotor");
         frontMotor = hardwareMap.get(DcMotorEx.class,"frontMotor");
         outtakeServo = hardwareMap.get(Servo.class, "outtakeServo");
+        gateServo = hardwareMap.get(Servo.class,"gateServo");
 
         frMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         brMotor.setDirection(DcMotorSimple.Direction.REVERSE);

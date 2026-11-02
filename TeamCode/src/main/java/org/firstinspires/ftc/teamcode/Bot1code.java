@@ -54,11 +54,9 @@ public class Bot1code extends LinearOpMode {
     }
     public void outtake(){
         if (gamepad2.a){
-            outakeMotor.setPower(0.5);
+            outakeMotor.setPower(-0.4);
         }
-        if (gamepad2.b){
-            outakeMotor.setPower(0.6);
-        }
+
         if (gamepad2.x){
             outakeMotor.setPower(-0.3);
             sleep(500);
@@ -67,24 +65,25 @@ public class Bot1code extends LinearOpMode {
     }
 
     public void intakeFeeder(){
-       if (gamepad2.right_trigger>0){
-           intakeFeeder.setPower(0.6);
+       if (gamepad1.right_bumper){
+           intakeFeeder.setPower(1);
         }
-       if (gamepad2.left_trigger>0){
-           intakeFeeder.setPower(-0.6);
+       if (gamepad1.left_bumper){
+           intakeFeeder.setPower(-1);
        }
-       if (gamepad2.right_stick_button){
+       if (gamepad1.y){
            intakeFeeder.setPower(0);
        }
     }
 
     public void gatecontrol(){
-        if (gamepad2.dpad_up){
+        if (gamepad1.a){
             gateServo.setPosition(1);
         }
-        if (gamepad2.dpad_down){
-            gateServo.setPosition(0);
+        if (gamepad1.b){
+            gateServo.setPosition(0.1);
         }
+
     }
 
     public void initialization() {
